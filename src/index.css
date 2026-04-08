@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-surface: #071325;
+  --color-surface-dim: #071325;
+  --color-surface-bright: #2e394d;
+  --color-surface-container-lowest: #030e20;
+  --color-surface-container-low: #101c2e;
+  --color-surface-container: #142032;
+  --color-surface-container-high: #1f2a3d;
+  --color-surface-container-highest: #2a3548;
+  
+  --color-primary: #81d4d8;
+  --color-primary-container: #0d7377;
+  --color-secondary: #bbc7df;
+  --color-secondary-container: #3e495e;
+  --color-tertiary: #ffb955;
+  --color-tertiary-container: #8f5d00;
+  
+  --color-on-surface: #d7e3fc;
+  --color-on-surface-variant: #bec9c9;
+  --color-on-primary: #003739;
+  --color-on-primary-container: #a2f5f9;
+  --color-on-secondary: #253144;
+  --color-on-tertiary: #452b00;
+  
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+  
+  --radius-xl: 1.5rem;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-body antialiased;
+    margin: 0;
+  }
+  
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight text-on-surface;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-3xl bg-surface-container-highest/40;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+}

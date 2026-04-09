@@ -27,6 +27,7 @@ import { auth, googleProvider, db } from './firebase';
 import { signInWithPopup, onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 
+// Navbar component renders the app header, navigation links, and user menu.
 const Navbar = ({ onViewChange, currentView, user, onSignIn, onSignOut, onSwitchAccount }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -171,6 +172,7 @@ const Navbar = ({ onViewChange, currentView, user, onSignIn, onSignOut, onSwitch
   );
 };
 
+// FeatureCard renders an overview card on the landing page.
 const FeatureCard = ({ icon: Icon, title, description, delay }) => (
   <motion.div 
     initial={{ opacity: 0, y: 30 }}
@@ -189,6 +191,7 @@ const FeatureCard = ({ icon: Icon, title, description, delay }) => (
   </motion.div>
 );
 
+// DestinationCard displays a curated sample destination on the landing page.
 const DestinationCard = ({ title, description, image, delay, onClick }) => (
   <motion.div 
     initial={{ opacity: 0, scale: 0.95 }}
@@ -217,6 +220,7 @@ const DestinationCard = ({ title, description, image, delay, onClick }) => (
   </motion.div>
 );
 
+// LandingPage contains the hero section and quick search UI.
 const LandingPage = ({ onStartPlanning }) => {
   const [searchValue, setSearchValue] = useState("");
 
@@ -345,6 +349,7 @@ const LandingPage = ({ onStartPlanning }) => {
   );
 };
 
+// PlanningPage renders generated itinerary details and allows pace selection.
 const PlanningPage = ({ destination, markdown }) => {
   const [pace, setPace] = useState('Moderate');
   
@@ -429,15 +434,16 @@ const PlanningPage = ({ destination, markdown }) => {
 };
 
 function App() {
+  // App state variables
   const [view, setView] = useState('landing');
   const [selectedDestination, setSelectedDestination] = useState('');
   const [itineraryMarkdown, setItineraryMarkdown] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
-
   const [backendProfile, setBackendProfile] = useState(null);
 
+  // Subscribe to Firebase auth state changes and sync user profile data.
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
@@ -481,6 +487,7 @@ function App() {
   }, []);
 
 
+  // Sign in the user through Firebase Google sign-in.
   const handleSignIn = async (isSwitch = false) => {
     try {
       if (isSwitch) {
@@ -506,6 +513,7 @@ function App() {
     }
   };
 
+  // Trigger itinerary generation through the backend API.
   const handleStartPlanning = async (dest) => {
     const destination = dest || 'Paris';
     setSelectedDestination(destination);

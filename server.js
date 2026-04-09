@@ -7,10 +7,11 @@ import { readFile } from 'fs/promises';
 
 dotenv.config();
 
+// Express application initialization
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Initialize Firebase Admin
+// Initialize Firebase Admin using a service account key
 const serviceAccount = JSON.parse(
   await readFile(new URL('./firebase-service-account.json', import.meta.url))
 );
@@ -25,7 +26,8 @@ const db = admin.firestore();
 app.use(cors());
 app.use(express.json());
 
-// Middleware to verify Firebase ID Token
+// Middleware to verify Firebase ID tokens sent from the frontend.
+// This protects API routes such as /api/profile.
 const authenticateUser = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -43,12 +45,13 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
+// OpenAI / OpenRouter client configuration.
 const openai = new OpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
   apiKey: process.env.OPENROUTER_API_KEY,
   defaultHeaders: {
-    'HTTP-Referer': 'http://localhost:5173', // Optional
-    'X-OpenRouter-Title': 'WanderMind AI', // Optional
+    'HTTP-Referer': 'http://localhost:5173', // Optional origin header for local development
+    'X-OpenRouter-Title': 'WanderMind AI', // Optional metadata header
   },
 });
 
@@ -106,6 +109,7 @@ app.post('/api/generate', async (req, res) => {
 
     const responseText = completion.choices[0].message.content;
     
+    // Return markdown text to the frontend for ReactMarkdown rendering.
     res.json({ markdown: responseText });
   } catch (error) {
     console.error('Error with OpenRouter:', error);
